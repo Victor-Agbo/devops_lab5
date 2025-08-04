@@ -33,7 +33,7 @@ pipeline {
                     echo "📦 Building Docker image for Maven project..."
                     sh '''
                         # Build Docker image
-                        docker build -t simple-maven-app:latest .
+                        docker /usr/bin/docker build -t simple-maven-app:latest .
                         docker images | grep simple-maven-app
                     '''
                 }
