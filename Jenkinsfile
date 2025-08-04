@@ -1,33 +1,49 @@
 pipeline {
-    agent none
+    agent any  // Run everything on local Ubuntu Jenkins host
+
     stages {
-        stage('Build & Test Maven') {
-            agent {
-                docker {
-                    image 'maven:3.9.6-eclipse-temurin-17'
-                    args '-v /root/.m2:/root/.m2'
-                }
-            }
+        stage('Checkout') {
             steps {
+                // Get code from GitHub
                 git branch: 'master', url: 'https://github.com/soram123/simple-maven-pipeline.git'
+                sh 'ls -l' // Debug: show files, ensure Dockerfile exists
+            }
+        }
+
+        stage('Build Maven Project') {
+            steps {
                 sh 'mvn clean install'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
                 sh 'mvn test'
             }
         }
+
         stage('Build Docker Image') {
-            agent any // runs on host, not inside Maven container
             steps {
                 sh 'docker build -t simple-maven-app:latest .'
                 sh 'docker images | grep simple-maven-app'
             }
         }
+
         stage('Run Docker Container') {
-            agent any
             steps {
                 sh 'docker rm -f simple-maven-container || true'
                 sh 'docker run -d --name simple-maven-container -p 8080:8080 simple-maven-app:latest'
                 sh 'docker ps'
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build, Test, and Docker Run completed successfully!'
+        }
+        failure {
+            echo '❌ Build failed. Check logs above.'
         }
     }
 }
