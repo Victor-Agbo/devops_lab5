@@ -32,7 +32,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 sh 'docker rm -f simple-maven-container || true'
-                sh 'docker run -d --name simple-maven-container -p 8080:8080 simple-maven-app:latest'
+                sh 'docker run -d --name simple-maven-container -p 9090:8080 simple-maven-app:latest'
                 sh 'docker ps'
             }
         }
