@@ -1,12 +1,26 @@
 pipeline {
-    agent any  // Run everything on local Ubuntu Jenkins host
+    agent {
+        docker {
+            image 'maven:3.9.6-eclipse-temurin-17'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v /root/.m2:/root/.m2'
+        }
+    }
 
     stages {
+        stage('Install Docker CLI in Build Container') {
+            steps {
+                sh '''
+                  apt-get update
+                  apt-get install -y docker.io
+                  docker --version
+                '''
+            }
+        }
+
         stage('Checkout') {
             steps {
-                // Get code from GitHub
                 git branch: 'master', url: 'https://github.com/soram123/simple-maven-pipeline.git'
-                sh 'ls -l' // Debug: show files, ensure Dockerfile exists
+                sh 'ls -l'
             }
         }
 
@@ -40,10 +54,11 @@ pipeline {
 
     post {
         success {
-            echo '✅ Build, Test, and Docker Run completed successfully!'
+            echo '✅ Build, Test, and Docker Run completed successfully inside Dockerized Jenkins pipeline!'
         }
         failure {
-            echo '❌ Build failed. Check logs above.'
+            echo '❌ Build failed inside Dockerized Jenkins pipeline.'
         }
     }
 }
+
