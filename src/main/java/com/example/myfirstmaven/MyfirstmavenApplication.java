@@ -4,11 +4,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@RestController
 public class MyfirstmavenApplication {
 
 	public static void main(String[] args) {
 		
 		SpringApplication.run(MyfirstmavenApplication.class, args);
+		@GetMapping("/")
 		System.out.println("hello world !");
 		
 	}
