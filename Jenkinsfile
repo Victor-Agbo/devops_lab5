@@ -21,6 +21,12 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage('Check Docker') {
+            steps {
+                sh 'docker --version'
+                sh 'which docker'
+            }
+        }
         stage('Package into Docker Image') {
             steps {
                 script {
