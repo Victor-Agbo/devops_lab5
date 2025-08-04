@@ -7,11 +7,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @RestController
 public class MyfirstmavenApplication {
 
+	@GetMapping("/")
+	    public String hello() {
+	        return "Hello from Spring Boot in Docker!";
+	    }
+
 	public static void main(String[] args) {
 		
 		SpringApplication.run(MyfirstmavenApplication.class, args);
-		@GetMapping("/")
-		System.out.println("hello world !");
+		
 		
 	}
 
