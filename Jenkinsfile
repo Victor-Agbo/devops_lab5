@@ -2,7 +2,8 @@ pipeline {
     agent {
         docker {
             image 'maven:3.9.6-eclipse-temurin-17'
-	    args "-v C://Users//Victor//AppData//Local//Jenkins//.jenkins//workspace//Maven-Docker-Build:/workspace -w /workspace"
+            // Convert Windows path to Linux format for Docker
+            args '-v /c/Users/Victor/AppData/Local/Jenkins/.jenkins/workspace/Maven-Docker-Build:/workspace -w /workspace'
         }
     }
 
@@ -61,4 +62,3 @@ pipeline {
         }
     }
 }
-
